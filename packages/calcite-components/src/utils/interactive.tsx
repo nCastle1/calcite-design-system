@@ -125,7 +125,11 @@ function addInteractionListeners(element: HTMLElement): void {
 }
 
 function getParentElement(component: InteractiveComponent): ParentElement {
-  return interactiveElementToParent.get(component.el as InteractiveHTMLElement);
+  return (
+    interactiveElementToParent.get(
+      component.el.shadowRoot.getRootNode() as InteractiveHTMLElement,
+    ) ?? component.el
+  );
 }
 
 function restoreInteraction(component: InteractiveComponent): void {
@@ -153,7 +157,7 @@ function removeInteractionListeners(element: HTMLElement): void {
  * @param component
  */
 export function connectInteractive(component: InteractiveComponent): void {
-  if (!component.disabled || !isFirefox) {
+  if (!isFirefox) {
     return;
   }
 
